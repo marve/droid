@@ -1,4 +1,4 @@
-# R2 Configuration
+# Droid Configuration
 
 1. Install Debian (10.6.0 at current).
 2. No desktop environment, just SSH and utilities packages
