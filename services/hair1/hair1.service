@@ -1,0 +1,11 @@
+[Unit]
+Description=A service that streams Air1 to the default sound device
+After=network.target
+
+[Service]
+ExecStart=docker run --rm --device /dev/snd --name air1-player hair1:latest
+ExecStop=docker rm -f air1-player
+Restart=on-failure
+
+[Install]
+WantedBy=default.target

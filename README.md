@@ -6,6 +6,7 @@
     * `vim`
     * `tmux`
     * `git`
+    * `alsa-utils` - For [sound control](https://unix.stackexchange.com/a/21090)
 4. [Install docker](https://docs.docker.com/engine/install/debian/).
     * Configure for [non-root access](https://docs.docker.com/engine/install/linux-postinstall/).
 5. Install [docker-compose](https://docs.docker.com/compose/install/).
