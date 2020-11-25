@@ -1,0 +1,13 @@
+version: '2'
+services:
+  plex:
+    container_name: plex
+    image: plexinc/pms-docker
+    restart: unless-stopped
+    environment:
+      - TZ=America/Los_Angeles
+    network_mode: host
+    volumes:
+      - /mnt/files/plex-data:/config
+      - /tmp/plex-transcode:/transcode
+      - /mnt/files:/data

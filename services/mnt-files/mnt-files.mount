@@ -1,0 +1,13 @@
+[Unit]
+Description=Mount files store
+After=network.target
+StopWhenUnneeded=true
+
+[Mount]
+What=192.168.1.3:/volume1/files
+Where=/mnt/files
+Type=nfs
+Options=_netdev,auto
+
+[Install]
+WantedBy=multi-user.target
