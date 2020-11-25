@@ -3,7 +3,7 @@ set -e
 
 scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 sudo systemctl set-environment DROID_HOME="$scriptDir"
-for path in $scriptDir/services/*/*.service; do
+for path in $scriptDir/services/*/{*.mount,*.service}; do
     serviceDir=$(dirname $path)
     serviceFile=$(basename "$path")
     serviceName=$(basename $serviceDir)
