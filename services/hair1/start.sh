@@ -26,7 +26,7 @@ url=$(curl 'https://listen.air1.com/Home/GetStreamUrl' \
 
 echo "url=$url userAgent=$userAgent"
 #gst-launch-1.0 souphttpsrc location=$url is-live=true user-agent="$userAgent" ! hlsdemux ! decodebin ! audioconvert ! autoaudiosink
-gst-launch-1.0 souphttpsrc location=$url is-live=true user-agent="$userAgent" \
+gst-launch-1.0 souphttpsrc location=$url is-live=false user-agent="$userAgent" \
   ! hlsdemux \
   ! decodebin \
   ! audioconvert \
