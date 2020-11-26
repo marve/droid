@@ -13,6 +13,6 @@ RUN apt-get update && apt-get install \
     gstreamer1.0-plugins-ugly \
     gstreamer1.0-libav -y --no-install-recommends
 
-ADD start.sh /start.sh
+COPY start.sh /start.sh
 
 ENTRYPOINT [ "/start.sh" ]
