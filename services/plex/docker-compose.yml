@@ -2,12 +2,15 @@ version: '2'
 services:
   plex:
     container_name: plex
-    image: plexinc/pms-docker
+    image: plexinc/pms-docker:1.21.0.3616-d87012962
     restart: unless-stopped
     environment:
       - TZ=America/Los_Angeles
+      - ALLOWED_NETWORKS=192.168.1.0/24
     network_mode: host
     volumes:
       - /mnt/files/plex-data:/config
       - /tmp/plex-transcode:/transcode
       - /mnt/files:/data
+    devices:
+      - /dev/dri:/dev/dri
