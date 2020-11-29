@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 
-ARG CHANNEL="Live"
+ARG CHANNEL="Christmas"
 ENV TZ=America/Los_Angeles
 ENV CHANNEL_ENV=$CHANNEL
 
