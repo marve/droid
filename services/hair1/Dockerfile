@@ -1,6 +1,8 @@
 FROM ubuntu:20.04
 
+ARG CHANNEL="Live"
 ENV TZ=America/Los_Angeles
+ENV CHANNEL_ENV=$CHANNEL
 
 RUN apt-get update && apt-get install \
     curl \
@@ -15,4 +17,4 @@ RUN apt-get update && apt-get install \
 
 COPY start.sh /start.sh
 
-ENTRYPOINT [ "/start.sh" ]
+ENTRYPOINT /start.sh $CHANNEL_ENV
