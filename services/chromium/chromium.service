@@ -3,7 +3,7 @@ Description=A service that starts Chromium in a container
 After=network.target
 
 [Service]
-ExecStart=docker run --rm --name chromium --shm-size 2g -p 5800:5800 --device /dev/snd overclockedllama/docker-chromium
+ExecStart=docker run --rm --name chromium --shm-size 2g -p 5800:5800 -e TZ=America/Los_Angeles --device /dev/snd overclockedllama/docker-chromium
 ExecStop=docker rm -f chromium
 Restart=on-failure
 
