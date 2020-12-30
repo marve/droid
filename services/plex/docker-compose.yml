@@ -2,7 +2,7 @@ version: '2'
 services:
   plex:
     container_name: plex
-    image: plexinc/pms-docker:1.21.0.3616-d87012962
+    image: plexinc/pms-docker:1.21.1.3830-6c22540d5
     restart: unless-stopped
     environment:
       - TZ=America/Los_Angeles
