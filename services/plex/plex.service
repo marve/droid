@@ -3,8 +3,6 @@ Description=A service that runs Plex
 After=network.target,mnt-files.mount
 Requires=mnt-files.mount
 
-[Mount]
-
 [Service]
 ExecStart=/bin/bash -c 'docker-compose --file $DROID_HOME/services/plex/docker-compose.yml \
                             --project-name plex up \
