@@ -9,8 +9,8 @@ Requires=mnt-files.mount
 ExecStart=/bin/bash -c 'docker-compose --file $DROID_HOME/services/plex/docker-compose.yml \
                             --project-name plex up \
                             --exit-code-from plex'
-ExecStop=/bin/bash -c 'docker-compose stop --file $DROID_HOME/services/plex/docker-compose.yml \
-                             --project-name plex'
+ExecStop=/bin/bash -c 'docker-compose --file $DROID_HOME/services/plex/docker-compose.yml \
+                             --project-name plex stop'
 Restart=on-failure
 
 [Install]
