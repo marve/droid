@@ -11,8 +11,3 @@
 4. [Install docker](https://docs.docker.com/engine/install/debian/).
     * Configure for [non-root access](https://docs.docker.com/engine/install/linux-postinstall/).
 5. Install [docker-compose](https://docs.docker.com/compose/install/).
-6. Setup mount points:
-```
-sudo mkdir /mnt/files
-sudo mkdir /mnt/backup
-```
