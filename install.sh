@@ -7,17 +7,20 @@ for path in $scriptDir/services/*/{*.mount,*.service}; do
     serviceDir=$(dirname $path)
     serviceFile=$(basename "$path")
     serviceName=$(basename $serviceDir)
-    echo "Found a service: $serviceFile at $path in $serviceDir called $serviceName"
+    echo "INFO: Found a service: $serviceFile at $path in $serviceDir called $serviceName"
     if systemctl | grep -q $serviceFile; then
-        echo "Service $serviceName already exists"
-        sudo systemctl stop $serviceFile
-    fi
-    if test -f "$serviceDir/disable"; then
-        echo "Service $serviceName is disabled; stopping"
-        continue
+        echo "INFO: Service $serviceName already exists"
+        sudo systemctl stop $serviceFile || :      
+        if test -f "$serviceDir/disable"; then
+            echo "INFO: Service $serviceName is disabled; removing"
+            sudo systemctl disable $serviceFile
+            sudo systemctl daemon-reload
+            sudo systemctl reset-failed
+            continue
+        fi
     fi
     if test -f "$serviceDir/Dockerfile"; then
-        echo "Service $serviceName has a Dockerfile so let's build it"
+        echo "INFO: Service $serviceName has a Dockerfile; building"
         pushd $serviceDir
         docker build -t $serviceName:latest .
         popd
