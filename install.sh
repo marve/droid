@@ -9,8 +9,8 @@ for path in $scriptDir/services/*/{*.mount,*.service}; do
     serviceName=$(basename $serviceDir)
     echo "INFO: Found a service: $serviceFile at $path in $serviceDir called $serviceName"
     if systemctl | grep -q $serviceFile; then
-        echo "INFO: Service $serviceName already exists"
-        sudo systemctl stop $serviceFile || :      
+        echo "INFO: Service $serviceName already exists; stopping"
+        sudo systemctl stop $serviceFile || :
         if test -f "$serviceDir/disable"; then
             echo "INFO: Service $serviceName is disabled; removing"
             sudo systemctl disable $serviceFile
@@ -18,6 +18,10 @@ for path in $scriptDir/services/*/{*.mount,*.service}; do
             sudo systemctl reset-failed
             continue
         fi
+    fi
+    if test -f "$serviceDir/disable"; then
+        echo "INFO: Service $serviceName is disabled; skipping"
+        continue
     fi
     if test -f "$serviceDir/Dockerfile"; then
         echo "INFO: Service $serviceName has a Dockerfile; building"
@@ -28,4 +32,5 @@ for path in $scriptDir/services/*/{*.mount,*.service}; do
     sudo ln -f -s "$path" "/etc/systemd/system/$serviceFile"
     sudo systemctl daemon-reload
     sudo systemctl enable --now "$serviceFile"
+    echo "INFO: Service $serviceName started"
 done
