@@ -7,12 +7,16 @@ for path in $scriptDir/services/*/{*.mount,*.service}; do
     serviceDir=$(dirname $path)
     serviceFile=$(basename "$path")
     serviceName=$(basename $serviceDir)
-    echo "INFO: Found a service: $serviceFile at $path in $serviceDir called $serviceName"
+    if [[ -n "$1" && "$1" != "$serviceName" ]]; then
+        echo "INFO: Found $serviceName but it isn't the target; skipping"
+        continue
+    fi
+    echo "INFO: Found $serviceFile at $path in $serviceDir called $serviceName"
     if systemctl | grep -q $serviceFile; then
-        echo "INFO: Service $serviceName already exists; stopping"
+        echo "INFO: $serviceName already exists; stopping"
         sudo systemctl stop $serviceFile || :
         if test -f "$serviceDir/disable"; then
-            echo "INFO: Service $serviceName is disabled; removing"
+            echo "INFO: $serviceName is disabled; removing"
             sudo systemctl disable $serviceFile
             sudo systemctl daemon-reload
             sudo systemctl reset-failed
@@ -20,11 +24,11 @@ for path in $scriptDir/services/*/{*.mount,*.service}; do
         fi
     fi
     if test -f "$serviceDir/disable"; then
-        echo "INFO: Service $serviceName is disabled; skipping"
+        echo "INFO: $serviceName is disabled; skipping"
         continue
     fi
     if test -f "$serviceDir/Dockerfile"; then
-        echo "INFO: Service $serviceName has a Dockerfile; building"
+        echo "INFO: $serviceName has a Dockerfile; building"
         pushd $serviceDir
         docker build -t $serviceName:latest .
         popd
@@ -32,5 +36,5 @@ for path in $scriptDir/services/*/{*.mount,*.service}; do
     sudo ln -f -s "$path" "/etc/systemd/system/$serviceFile"
     sudo systemctl daemon-reload
     sudo systemctl enable --now "$serviceFile"
-    echo "INFO: Service $serviceName started"
+    echo "INFO: $serviceName started"
 done

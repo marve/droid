@@ -16,7 +16,7 @@
 
 Each subdirectory in `services/` represents a service and at minimum must have a `.service` file describing a [systemd unit](https://www.freedesktop.org/software/systemd/man/systemd.unit.html). The service may optionally specify a `Dockerfile` and/or a `docker-compose.yml`.
 
-To apply services (i.e., add or update services) to a host, run `apply.sh`.
+To apply services (i.e., add or update services) to a host, run `apply.sh`. Optionally use `apply.sh <serviceName>` to apply a single service.
 
 To remove services from the host, run `uninstall.sh`
 
