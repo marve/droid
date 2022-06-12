@@ -1,0 +1,15 @@
+[Unit]
+Description=A service that runs Pi-hole
+After=network.target,mnt-files.mount
+Requires=mnt-files.mount
+
+[Service]
+ExecStart=/bin/bash -c 'docker-compose --file $DROID_HOME/services/pihole/docker-compose.yml \
+                            --project-name pihole up \
+                            --exit-code-from pihole'
+ExecStop=/bin/bash -c 'docker-compose --file $DROID_HOME/services/pihole/docker-compose.yml \
+                             --project-name pihole stop'
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
