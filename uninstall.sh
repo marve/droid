@@ -12,3 +12,4 @@ for path in $(ls -lA /etc/systemd/system | grep $scriptDir | rev | cut -d' ' -f 
     sudo systemctl daemon-reload
     sudo systemctl reset-failed
 done
+docker image prune
