@@ -38,4 +38,4 @@ for path in $scriptDir/services/*/{*.mount,*.service}; do
     sudo systemctl enable --now "$serviceFile"
     echo "INFO: $serviceName started"
 done
-docker image prune
+docker image prune -f
