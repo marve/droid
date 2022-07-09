@@ -1,0 +1,14 @@
+[Unit]
+Description=A service that runs the UniFi Controller
+After=network.target
+
+[Service]
+ExecStart=/bin/bash -c 'docker-compose --file $DROID_HOME/services/unifi-controller/docker-compose.yml \
+                            --project-name unifi-controller up \
+                            --exit-code-from unifi-controller'
+ExecStop=/bin/bash -c 'docker-compose --file $DROID_HOME/services/unifi-controller/docker-compose.yml \
+                            --project-name unifi-controller stop'
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
