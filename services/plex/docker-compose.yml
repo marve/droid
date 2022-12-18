@@ -2,7 +2,8 @@ version: '2'
 services:
   plex:
     container_name: plex
-    image: plexinc/pms-docker:1.27.2.5929-a806c5905
+    image: my/plex-with-gpu-drivers:latest
+    build: './'
     restart: unless-stopped
     environment:
       - TZ=America/Los_Angeles
