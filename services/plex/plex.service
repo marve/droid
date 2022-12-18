@@ -1,14 +1,12 @@
 [Unit]
 Description=A service that runs Plex
-After=network.target,mnt-files.mount
+After=network.target mnt-files.mount
 Requires=mnt-files.mount
 
 [Service]
-ExecStart=/bin/bash -c 'docker-compose --file $DROID_HOME/services/plex/docker-compose.yml \
-                            --project-name plex up \
-                            --exit-code-from plex'
+ExecStart=/bin/bash -c 'exec $DROID_HOME/services/plex/start.sh'
 ExecStop=/bin/bash -c 'docker-compose --file $DROID_HOME/services/plex/docker-compose.yml \
-                             --project-name plex stop'
+                            --project-name plex stop'
 Restart=on-failure
 
 [Install]
