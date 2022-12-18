@@ -1,6 +1,6 @@
 [Unit]
 Description=A service that runs Pi-hole
-After=network.target,mnt-files.mount
+After=network.target mnt-files.mount
 Requires=mnt-files.mount
 
 [Service]
