@@ -1,10 +1,10 @@
 [Unit]
-Description=A service that starts Chromium in a container
+Description=A service that starts Firefox in a container
 After=network.target
 
 [Service]
-ExecStart=docker run --rm --name chromium --shm-size 2g -p 5800:5800 --env TZ=America/Los_Angeles --env KEEP_APP_RUNNING=1 --device /dev/snd --volume /mnt/backup:/workdir:rw overclockedllama/docker-chromium
-ExecStop=docker rm -f chromium
+ExecStart=docker run --rm --name firefoxium --shm-size 2g -p 5800:5800 --env TZ=America/Los_Angeles --env KEEP_APP_RUNNING=1 --device /dev/snd --volume /mnt/backup/tmp:/workdir:rw jlesage/firefox:v23.02.3
+ExecStop=docker rm -f firefoxium
 Restart=on-failure
 
 [Install]
