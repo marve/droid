@@ -1,0 +1,11 @@
+[Unit]
+Description=A service that downloads YouTube media
+After=network.target mnt-files.mount
+Requires=mnt-files.mount
+
+[Service]
+ExecStart=/bin/bash $DROID_HOME/services/youtube-dl/start.sh
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
