@@ -26,3 +26,7 @@ To apply services (i.e., create or update) to a host, run `apply.sh`. Optionally
 To remove services from the host, run `uninstall.sh`
 
 To disable a service, add a file named `disable` to the service directory and run `apply.sh`.
+
+# Troubleshooting
+
+To view the logs of a service, use the name of the unit file: `sudo journalctl -u <serviceName>.service`.
