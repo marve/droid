@@ -1,6 +1,7 @@
 [Unit]
 Description=A service that starts Firefox in a container
-After=network.target
+After=network.target docker.service
+Requires=docker.service
 
 [Service]
 ExecStart=docker run --rm --name firefoxium --shm-size 2g -p 5800:5800 --env TZ=America/Los_Angeles --env KEEP_APP_RUNNING=1 --device /dev/snd --volume /mnt/backup/tmp:/workdir:rw jlesage/firefox:v23.02.3

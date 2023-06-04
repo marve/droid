@@ -1,6 +1,6 @@
 [Unit]
 Description=A service that runs the UniFi Controller
-After=network.target
+After=network.target docker.service
 
 [Service]
 ExecStart=/bin/bash -c 'docker-compose --file $DROID_HOME/services/unifi-controller/docker-compose.yml \
