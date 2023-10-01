@@ -1,0 +1,12 @@
+[Unit]
+Description=A service that runs a wordsearch generating webapp
+After=network.target docker.service
+Requires=docker.service
+
+[Service]
+ExecStart=docker run --rm --publish 5000:5000 --name wordsearcher-app wordsearcher:latest
+ExecStop=docker rm -f wordsearcher-app
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
