@@ -1,0 +1,13 @@
+[Unit]
+Description=A service that runs LubeLogger
+After=network.target mnt-files.mount docker.service
+Requires=mnt-files.mount docker.service
+
+[Service]
+ExecStart=/bin/bash -c 'exec $DROID_HOME/services/lubelog/start.sh'
+ExecStop=/bin/bash -c 'docker-compose --file $DROID_HOME/services/lubelog/docker-compose.yml \
+                            --project-name lubelog stop'
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
