@@ -13,5 +13,6 @@ services:
       - /opt/plex-data:/config
       - /tmp/plex-transcode:/transcode
       - /mnt/files:/data
+      - /mnt/photo:/photo
     devices:
       - /dev/dri:/dev/dri
