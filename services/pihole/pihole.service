@@ -4,11 +4,11 @@ After=network.target mnt-files.mount docker.service
 Requires=mnt-files.mount docker.service
 
 [Service]
-ExecStart=/bin/bash -c 'docker-compose --file $DROID_HOME/services/pihole/docker-compose.yml \
-                            --project-name pihole up \
+ExecStart=/bin/bash -c 'docker compose --file $DROID_HOME/services/pihole/docker-compose.yml \
+                            --project-name pihole_v6 up \
                             --exit-code-from pihole'
-ExecStop=/bin/bash -c 'docker-compose --file $DROID_HOME/services/pihole/docker-compose.yml \
-                             --project-name pihole stop'
+ExecStop=/bin/bash -c 'docker compose --file $DROID_HOME/services/pihole/docker-compose.yml \
+                             --project-name pihole_v6 stop'
 Restart=on-failure
 
 [Install]
