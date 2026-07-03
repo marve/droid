@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
-SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
-DOWNLOAD_DIR=/mnt/files/YouTube
+SCRIPT_DIR="${SCRIPT_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)}"
+DOWNLOAD_DIR="${DOWNLOAD_DIR:-/mnt/files/YouTube}"
 
 mkdir -p "$SCRIPT_DIR/db/audio" "$SCRIPT_DIR/db/video"
 
