@@ -1,11 +1,11 @@
 [Unit]
-Description=A service that downloads YouTube media
-After=network.target mnt-files.mount docker.service
+Description=Download new YouTube media via yt-dlp
+After=network-online.target mnt-files.mount docker.service
 Requires=mnt-files.mount docker.service
 
 [Service]
+Type=oneshot
 ExecStart=/bin/bash $DROID_HOME/services/youtube-dl/start.sh
-Restart=on-failure
 
 [Install]
-WantedBy=default.target
+WantedBy=multi-user.target
