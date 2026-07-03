@@ -12,9 +12,10 @@ setup() {
 
   mkdir -p "$TEST_DIR/db/audio" "$TEST_DIR/db/video" "$DOWNLOAD_DIR"
 
-  # Fake docker binary that records its arguments
+  # Fake docker binary: records its arguments; 'info' succeeds silently
   cat > "$MOCK_DIR/docker" <<'EOF'
 #!/bin/bash
+if [[ "$1" == "info" ]]; then exit 0; fi
 echo "$@" >> "$DOCKER_CALLS_FILE"
 EOF
   chmod +x "$MOCK_DIR/docker"
@@ -35,10 +36,29 @@ teardown() {
   [ -d "$TEST_DIR/db/video" ]
 }
 
-@test "does not call docker when both db dirs are empty" {
+@test "does not call docker run when both db dirs are empty" {
   run bash "$START_SH"
   [ "$status" -eq 0 ]
   [ ! -f "$DOCKER_CALLS_FILE" ]
+}
+
+@test "warns and exits 0 when both db dirs are empty" {
+  run bash "$START_SH"
+  [ "$status" -eq 0 ]
+  echo "$output" | grep -q "\[warn\]"
+}
+
+@test "aborts with exit code 1 when docker daemon is unreachable" {
+  cat > "$MOCK_DIR/docker" <<'EOF'
+#!/bin/bash
+if [[ "$1" == "info" ]]; then exit 1; fi
+echo "$@" >> "$DOCKER_CALLS_FILE"
+EOF
+  chmod +x "$MOCK_DIR/docker"
+  touch "$TEST_DIR/db/audio/PLtest"
+  run bash "$START_SH"
+  [ "$status" -eq 1 ]
+  echo "$output" | grep -q "\[error\]"
 }
 
 @test "calls docker for an audio playlist with correct flags" {
@@ -71,6 +91,14 @@ teardown() {
   grep -q -- "--output" "$DOCKER_CALLS_FILE"
 }
 
+@test "logs archive path for each playlist" {
+  touch "$TEST_DIR/db/audio/PLabc123"
+  run bash "$START_SH"
+  [ "$status" -eq 0 ]
+  echo "$output" | grep -q "archive:"
+  echo "$output" | grep -q "PLabc123.archive"
+}
+
 @test "passes DOWNLOAD_DIR as docker volume" {
   touch "$TEST_DIR/db/audio/PLabc123"
   run bash "$START_SH"
@@ -96,22 +124,76 @@ teardown() {
   grep -q -- "PLvideo" "$DOCKER_CALLS_FILE"
 }
 
+@test "logs playlist counts at startup" {
+  touch "$TEST_DIR/db/audio/PL1"
+  touch "$TEST_DIR/db/video/PL2"
+  run bash "$START_SH"
+  [ "$status" -eq 0 ]
+  echo "$output" | grep -q "1 audio playlist"
+  echo "$output" | grep -q "1 video playlist"
+}
+
 @test "continues and exits 0 when docker fails for one playlist" {
-  # Make docker fail for PL1 but succeed for PL2
-  cat > "$(dirname "$(which docker)")/docker" <<'EOF'
+  cat > "$MOCK_DIR/docker" <<'EOF'
 #!/bin/bash
+if [[ "$1" == "info" ]]; then exit 0; fi
 echo "$@" >> "$DOCKER_CALLS_FILE"
 if echo "$@" | grep -q "PL1"; then
   exit 1
 fi
 EOF
-  chmod +x "$(dirname "$(which docker)")/docker"
+  chmod +x "$MOCK_DIR/docker"
 
   touch "$TEST_DIR/db/audio/PL1"
   touch "$TEST_DIR/db/audio/PL2"
   run bash "$START_SH"
   [ "$status" -eq 0 ]
   grep -q -- "PL2" "$DOCKER_CALLS_FILE"
+}
+
+@test "logs exit code when docker fails for a playlist" {
+  cat > "$MOCK_DIR/docker" <<'EOF'
+#!/bin/bash
+if [[ "$1" == "info" ]]; then exit 0; fi
+echo "$@" >> "$DOCKER_CALLS_FILE"
+exit 42
+EOF
+  chmod +x "$MOCK_DIR/docker"
+
+  touch "$TEST_DIR/db/audio/PLtest"
+  run bash "$START_SH"
+  [ "$status" -eq 0 ]
+  echo "$output" | grep -q "exit code: 42"
+}
+
+@test "logs download count for successful playlist" {
+  cat > "$MOCK_DIR/docker" <<'EOF'
+#!/bin/bash
+if [[ "$1" == "info" ]]; then exit 0; fi
+echo "$@" >> "$DOCKER_CALLS_FILE"
+echo "[download] Destination: /workdir/some/file1.mp3"
+echo "[download] Destination: /workdir/some/file2.mp3"
+EOF
+  chmod +x "$MOCK_DIR/docker"
+
+  touch "$TEST_DIR/db/audio/PLtest"
+  run bash "$START_SH"
+  [ "$status" -eq 0 ]
+  echo "$output" | grep -q "2 new file(s) downloaded"
+}
+
+@test "logs duration for each playlist" {
+  touch "$TEST_DIR/db/audio/PLtest"
+  run bash "$START_SH"
+  [ "$status" -eq 0 ]
+  echo "$output" | grep -q "duration:"
+}
+
+@test "logs total duration at end" {
+  touch "$TEST_DIR/db/audio/PLtest"
+  run bash "$START_SH"
+  [ "$status" -eq 0 ]
+  echo "$output" | grep -q "total duration:"
 }
 
 @test "uses yt-dlp image" {
@@ -127,3 +209,4 @@ EOF
   [ "$status" -eq 0 ]
   grep -q -- "--pull always" "$DOCKER_CALLS_FILE"
 }
+
