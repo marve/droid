@@ -3,7 +3,7 @@ set -e
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 DOWNLOAD_DIR=/mnt/files/YouTube
 
-mkdir -p "$SCRIPT_DIR/db/both" "$SCRIPT_DIR/db/audio" "$SCRIPT_DIR/db/video"
+mkdir -p "$SCRIPT_DIR/db/audio" "$SCRIPT_DIR/db/video"
 
 run_yt_dlp() {
   local playlist_id="$1"
@@ -19,13 +19,6 @@ run_yt_dlp() {
     "$@" \
     "$playlist_id"
 }
-
-for file in "$SCRIPT_DIR/db/both/"*; do
-  [[ -f "$file" ]] || continue
-  playlist_id=$(basename "$file")
-  echo "$(date +%T) [both] Downloading $playlist_id"
-  run_yt_dlp "$playlist_id" || echo "$(date +%T) Error on $playlist_id; continuing"
-done
 
 for file in "$SCRIPT_DIR/db/audio/"*; do
   [[ -f "$file" ]] || continue

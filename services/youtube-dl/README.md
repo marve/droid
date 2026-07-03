@@ -3,11 +3,10 @@ Download YouTube playlists via yt-dlp
 
 # Usage
 
-Add a playlist, channel, or video URL/ID as a file in one of the three subdirectories under `db/`:
+Add a playlist, channel, or video URL/ID as a file in one of the two subdirectories under `db/`:
 
 | Directory | Behaviour |
 |-----------|-----------|
-| `db/both/` | Download best available video+audio |
 | `db/audio/` | Extract audio only (MP3, best quality) |
 | `db/video/` | Download best video+audio, mux to MKV |
 
