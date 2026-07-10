@@ -1,6 +1,6 @@
 # Droid Configuration
 
-1. Install Debian (11 at current).
+1. Install Debian (12 at current).
 2. No desktop environment, just SSH and utilities packages
 3. After installation completes, add these packages:
     ```bash
@@ -15,7 +15,7 @@
     ```
 4. [Install docker](https://docs.docker.com/engine/install/debian/).
     * Configure for [non-root access](https://docs.docker.com/engine/install/linux-postinstall/).
-5. Install [docker-compose](https://docs.docker.com/compose/install/).
+    * Docker Compose is bundled as a plugin (`docker compose`). A standalone `docker-compose` binary is no longer needed.
 
 # Service
 
